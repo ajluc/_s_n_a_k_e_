@@ -36,12 +36,25 @@ class Snake {
     if (e.key === 'ArrowDown') {
       let newPosition = { row: head.row + 1, column: head.column }
       barry.position.unshift(newPosition)
-      let newHead = document.querySelector(
-        `.r${barry.position[0].row}c${barry.position[0].column}`
-      )
-      newHead.classList.add('snake-current')
-      console.log(barry.position)
+    } else if (e.key === 'ArrowUp') {
+      let newPosition = { row: head.row - 1, column: head.column }
+      barry.position.unshift(newPosition)
+    } else if (e.key === 'ArrowLeft') {
+      let newPosition = { row: head.row, column: head.column - 1 }
+      barry.position.unshift(newPosition)
+    } else if (e.key === 'ArrowRight') {
+      let newPosition = { row: head.row, column: head.column + 1 }
+      barry.position.unshift(newPosition)
     }
+    let shorten = barry.position.pop()
+    document
+      .querySelector(`.r${barry.position[0].row}c${barry.position[0].column}`)
+      .classList.add('snake-current')
+    document
+      .querySelector(`.r${shorten.row}c${shorten.column}`)
+      .classList.remove('snake-current')
+    console.log(shorten)
+    console.log(barry.position)
   }
 }
 
