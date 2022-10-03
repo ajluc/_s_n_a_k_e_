@@ -7,8 +7,20 @@ body {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
   height: 500px;
   width: 500px;
+}
+
+.square {
+  outline: solid grey 2px;
+}
+
+.target-current {
+  background-color: gray;
+}
+
+.snake-current {
+  background-color: black;
 }
