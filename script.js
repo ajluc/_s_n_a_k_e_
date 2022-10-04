@@ -33,13 +33,8 @@ class Snake {
     this.position = initialPosition
     this.direction = directionCurrent
   }
-  // snake move() method needs:
-  // argument of direction
-  // snake head location
-  // adds another index to snake location, in direction that is passed through
-  move(e) {
-    let head = barry.position[0]
-    // Change direction based on arrow key presses
+  // Change direction based on arrow key presses
+  changeDirection(e) {
     if (e.key === 'ArrowDown') {
       direction = { row: 1, column: 0 }
     } else if (e.key === 'ArrowUp') {
@@ -49,6 +44,14 @@ class Snake {
     } else if (e.key === 'ArrowRight') {
       direction = { row: 0, column: 1 }
     }
+    // this.move() // allows movement on arrow key presses
+  }
+  // snake move() method needs:
+  // argument of direction
+  // snake head location
+  // adds another index to snake location, in direction that is passed through
+  move() {
+    let head = barry.position[0]
     // Update snake position based on direction (currently no time component)
     let newPosition = {
       row: head.row + direction.row,
@@ -105,6 +108,7 @@ class Snake {
   gameOver() {
     console.log('uh oh GAME OVERRRRR')
     document.removeEventListener('keydown', logKey)
+    clearInterval(interval)
   }
 }
 
@@ -147,6 +151,10 @@ const targetLocate = () => {
 }
 let target = targetLocate()
 
+// Time delay loop
+let interval = setInterval(() => barry.move(), 1000)
+// console.log(interval)
+
 // Event listeners
 // if currently direction.column is 0, motion is along the row
 // Turn on event listeners to up/down arrow keys
@@ -159,7 +167,6 @@ let target = targetLocate()
 
 // Test: logging key presses
 const logKey = (e) => {
-  barry.move(e)
-  // console.log(score)
+  barry.changeDirection(e)
 }
 document.addEventListener('keydown', logKey)
