@@ -1,10 +1,12 @@
 // Global variables
 const gridContainer = document.querySelector('.grid-container')
 
-let numColumns = 8
-let numRows = 8
+let numColumns = 20
+let numRows = 20
 
 let score = 0
+
+let speed = 100
 
 // Direction variable. Value can be 0, 1, -1
 let direction = {
@@ -12,14 +14,24 @@ let direction = {
   row: 0 // not moving R or L
 }
 
-// Create a grid of squares with class for column and row
+// Create a grid of squares with class for column and row, add checkerboard pattern
+let checker
 for (let i = 0; i < numRows; i++) {
+  if (i % 2) {
+    checker = 0
+  } else {
+    checker = 1
+  }
   for (let j = 0; j < numColumns; j++) {
     const square = document.createElement('div')
     square.classList.add('square')
     square.classList.add(`r${i}c${j}`) // Class name that contains row and column location information
-    square.innerText = `r${i}c${j}` // Display class as inner text for check
+    // square.innerText = `r${i}c${j}` // Display class as inner text for check
+    if (checker % 2) {
+      square.classList.add('checker')
+    }
     gridContainer.append(square)
+    checker++
   }
 }
 
@@ -35,14 +47,20 @@ class Snake {
   }
   // Change direction based on arrow key presses
   changeDirection(e) {
-    if (e.key === 'ArrowDown') {
-      direction = { row: 1, column: 0 }
-    } else if (e.key === 'ArrowUp') {
-      direction = { row: -1, column: 0 }
-    } else if (e.key === 'ArrowLeft') {
-      direction = { row: 0, column: -1 }
-    } else if (e.key === 'ArrowRight') {
-      direction = { row: 0, column: 1 }
+    if (direction.row) {
+      console.log(`row ${direction.row}`)
+      if (e.key === 'ArrowLeft') {
+        direction = { row: 0, column: -1 }
+      } else if (e.key === 'ArrowRight') {
+        direction = { row: 0, column: 1 }
+      }
+    } else if (direction.column) {
+      console.log(`column ${direction.column}`)
+      if (e.key === 'ArrowDown') {
+        direction = { row: 1, column: 0 }
+      } else if (e.key === 'ArrowUp') {
+        direction = { row: -1, column: 0 }
+      }
     }
     // this.move() // allows movement on arrow key presses
   }
@@ -152,7 +170,7 @@ const targetLocate = () => {
 let target = targetLocate()
 
 // Time delay loop
-let interval = setInterval(() => barry.move(), 1000)
+let interval = setInterval(() => barry.move(), speed)
 // console.log(interval)
 
 // Event listeners
