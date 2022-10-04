@@ -9,6 +9,7 @@ let direction = {
   column: 1, // moving Down the column
   row: 0 // not moving R or L
 }
+// NOT CURRENTLY IN USE
 
 // Create a grid of squares with class for column and row
 for (let i = 0; i < numRows; i++) {
@@ -21,16 +22,17 @@ for (let i = 0; i < numRows; i++) {
   }
 }
 
-// Change CSS to display location of snake or target
-// const snakeCurrent = document.querySelector('.r1c2')
-// snakeCurrent.classList.add('snake-current')
-
 // Create Snake class
 class Snake {
   constructor(initialPosition, directionCurrent) {
     this.position = initialPosition
     this.direction = directionCurrent
   }
+  // snake move() method needs:
+  // argument of direction
+  // snake head location
+  // adds another index to snake location, in direction that is passed through
+  // MAKE THIS MORE DRY: swap out for direction object once time delay comes into play
   move(e) {
     let head = barry.position[0]
     if (e.key === 'ArrowDown') {
@@ -46,15 +48,22 @@ class Snake {
       let newPosition = { row: head.row, column: head.column + 1 }
       barry.position.unshift(newPosition)
     }
-    let shorten = barry.position.pop()
+    if (
+      barry.position[0].row !== target.row ||
+      barry.position[0].column !== target.column
+    ) {
+      let shorten = barry.position.pop()
+      document
+        .querySelector(`.r${shorten.row}c${shorten.column}`)
+        .classList.remove('snake-current')
+    }
+    console.log(target)
+    console.log(barry.position[0])
     document
       .querySelector(`.r${barry.position[0].row}c${barry.position[0].column}`)
       .classList.add('snake-current')
-    document
-      .querySelector(`.r${shorten.row}c${shorten.column}`)
-      .classList.remove('snake-current')
-    console.log(shorten)
-    console.log(barry.position)
+    // console.log(shorten)
+    // console.log(barry.position)
   }
 }
 
@@ -67,7 +76,7 @@ const barry = new Snake(
   ],
   direction
 )
-// Test: placing barry on the page
+// Test: placing initial barry on the page
 for (let i = 0; i < barry.position.length; i++) {
   let snakey = document.querySelector(
     `.r${barry.position[i].row}c${barry.position[i].column}`
@@ -80,10 +89,20 @@ for (let i = 0; i < barry.position.length; i++) {
 // 0th index is snake head, so where we move from
 // current direction
 
-// snake move() method needs:
-// argument of direction
-// snake head location
-// adds another index to snake location, in direction that is passed through
+// Random targets that are not currently on the snake
+const targetLocate = () => {
+  let randColumn = Math.floor(Math.random() * numColumns)
+  let randRow = Math.floor(Math.random() * numRows)
+  if (barry.position.includes({ row: randRow, column: randColumn })) {
+    targetLocate()
+  } else {
+    document
+      .querySelector(`.r${randRow}c${randColumn}`)
+      .classList.add('target-current')
+    return { row: randRow, column: randColumn }
+  }
+}
+let target = targetLocate()
 
 // Event listeners
 // if currently direction.column is 0, motion is along the row
