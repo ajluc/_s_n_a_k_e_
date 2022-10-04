@@ -4,6 +4,8 @@ const gridContainer = document.querySelector('.grid-container')
 let numColumns = 8
 let numRows = 8
 
+let score = 0
+
 // Direction variable. Value can be 0, 1, -1
 let direction = {
   column: 1, // moving Down the column
@@ -49,21 +51,26 @@ class Snake {
       barry.position.unshift(newPosition)
     }
     if (
-      barry.position[0].row !== target.row ||
-      barry.position[0].column !== target.column
+      barry.position[0].row === target.row &&
+      barry.position[0].column === target.column
     ) {
+      this.intersectTarget()
+    } else {
       let shorten = barry.position.pop()
       document
         .querySelector(`.r${shorten.row}c${shorten.column}`)
         .classList.remove('snake-current')
     }
-    console.log(target)
-    console.log(barry.position[0])
     document
       .querySelector(`.r${barry.position[0].row}c${barry.position[0].column}`)
       .classList.add('snake-current')
-    // console.log(shorten)
-    // console.log(barry.position)
+    console.log(barry.position[0])
+    console.log(target)
+  }
+  intersectTarget() {
+    score += 10
+    document.querySelector('.target-current').classList.remove('target-current')
+    target = targetLocate()
   }
 }
 
@@ -116,7 +123,7 @@ let target = targetLocate()
 
 // Test: logging key presses
 const logKey = (e) => {
-  console.log(`key down ${e.key}`)
   barry.move(e)
+  console.log(score)
 }
 document.addEventListener('keydown', logKey)
