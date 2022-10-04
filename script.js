@@ -11,7 +11,6 @@ let direction = {
   column: 1, // moving Down the column
   row: 0 // not moving R or L
 }
-// NOT CURRENTLY IN USE
 
 // Create a grid of squares with class for column and row
 for (let i = 0; i < numRows; i++) {
@@ -25,6 +24,10 @@ for (let i = 0; i < numRows; i++) {
 }
 
 // Create Snake class
+// snake object needs:
+// array of current locations
+// 0th index is snake head, so where we move from
+// current direction
 class Snake {
   constructor(initialPosition, directionCurrent) {
     this.position = initialPosition
@@ -34,9 +37,9 @@ class Snake {
   // argument of direction
   // snake head location
   // adds another index to snake location, in direction that is passed through
-  // MAKE THIS MORE DRY: swap out for direction object once time delay comes into play
   move(e) {
     let head = barry.position[0]
+    // Change direction based on arrow key presses
     if (e.key === 'ArrowDown') {
       direction = { row: 1, column: 0 }
     } else if (e.key === 'ArrowUp') {
@@ -46,34 +49,66 @@ class Snake {
     } else if (e.key === 'ArrowRight') {
       direction = { row: 0, column: 1 }
     }
+    // Update snake position based on direction (currently no time component)
     let newPosition = {
       row: head.row + direction.row,
       column: head.column + direction.column
     }
-    barry.position.unshift(newPosition)
+    // If barry head hits himself,
+    // Run gameOver function
     if (
+      barry.position.some(
+        (element) =>
+          element.row === newPosition.row &&
+          element.column === newPosition.column
+      )
+    ) {
+      console.log(barry.position)
+      console.log(head)
+      this.gameOver()
+    }
+    barry.position.unshift(newPosition) // Add new position
+    if (
+      // if head intersects target, do not remove end of snake
       barry.position[0].row === target.row &&
       barry.position[0].column === target.column
     ) {
       this.intersectTarget()
     } else {
+      // otherwise, remove end of snake
       let shorten = barry.position.pop()
       document
         .querySelector(`.r${shorten.row}c${shorten.column}`)
         .classList.remove('snake-current')
     }
-    document
-      .querySelector(`.r${barry.position[0].row}c${barry.position[0].column}`)
-      .classList.add('snake-current')
+    if (
+      // If barry is inside the edge of gameboard
+      barry.position[0].row >= 0 &&
+      barry.position[0].row < numRows &&
+      barry.position[0].column >= 0 &&
+      barry.position[0].column < numColumns
+    ) {
+      // Flip CSS style of new head position
+      document
+        .querySelector(`.r${barry.position[0].row}c${barry.position[0].column}`)
+        .classList.add('snake-current')
+    } else {
+      // If barry is outside the gameboard, run gameOver function
+      this.gameOver()
+    }
   }
   intersectTarget() {
     score += 10
     document.querySelector('.target-current').classList.remove('target-current')
     target = targetLocate()
   }
+  gameOver() {
+    console.log('uh oh GAME OVERRRRR')
+    document.removeEventListener('keydown', logKey)
+  }
 }
 
-// Test instance of Snake
+// Instance of Snake
 const barry = new Snake(
   [
     { row: 1, column: 3 },
@@ -90,17 +125,10 @@ for (let i = 0; i < barry.position.length; i++) {
   snakey.classList.add('snake-current')
 }
 
-// snake object needs:
-// array of current locations
-// 0th index is snake head, so where we move from
-// current direction
-
-// Random targets that are not currently on the snake
+// Random targets that are not on the snake's current locations
 const targetLocate = () => {
   let randColumn = Math.floor(Math.random() * numColumns)
   let randRow = Math.floor(Math.random() * numRows)
-  // This code is not working:
-  // if (barry.position.includes({ row: randRow, column: randColumn })) {
   if (
     barry.position.some(
       (element) => element.row === randRow && element.column === randColumn
@@ -110,7 +138,6 @@ const targetLocate = () => {
     console.log({ row: randRow, column: randColumn })
     console.log('retry')
     return targetLocate()
-    // ^^^
   } else {
     document
       .querySelector(`.r${randRow}c${randColumn}`)
