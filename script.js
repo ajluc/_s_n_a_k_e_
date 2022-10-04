@@ -38,18 +38,19 @@ class Snake {
   move(e) {
     let head = barry.position[0]
     if (e.key === 'ArrowDown') {
-      let newPosition = { row: head.row + 1, column: head.column }
-      barry.position.unshift(newPosition)
+      direction = { row: 1, column: 0 }
     } else if (e.key === 'ArrowUp') {
-      let newPosition = { row: head.row - 1, column: head.column }
-      barry.position.unshift(newPosition)
+      direction = { row: -1, column: 0 }
     } else if (e.key === 'ArrowLeft') {
-      let newPosition = { row: head.row, column: head.column - 1 }
-      barry.position.unshift(newPosition)
+      direction = { row: 0, column: -1 }
     } else if (e.key === 'ArrowRight') {
-      let newPosition = { row: head.row, column: head.column + 1 }
-      barry.position.unshift(newPosition)
+      direction = { row: 0, column: 1 }
     }
+    let newPosition = {
+      row: head.row + direction.row,
+      column: head.column + direction.column
+    }
+    barry.position.unshift(newPosition)
     if (
       barry.position[0].row === target.row &&
       barry.position[0].column === target.column
@@ -64,8 +65,6 @@ class Snake {
     document
       .querySelector(`.r${barry.position[0].row}c${barry.position[0].column}`)
       .classList.add('snake-current')
-    console.log(barry.position[0])
-    console.log(target)
   }
   intersectTarget() {
     score += 10
@@ -100,8 +99,18 @@ for (let i = 0; i < barry.position.length; i++) {
 const targetLocate = () => {
   let randColumn = Math.floor(Math.random() * numColumns)
   let randRow = Math.floor(Math.random() * numRows)
-  if (barry.position.includes({ row: randRow, column: randColumn })) {
-    targetLocate()
+  // This code is not working:
+  // if (barry.position.includes({ row: randRow, column: randColumn })) {
+  if (
+    barry.position.some(
+      (element) => element.row === randRow && element.column === randColumn
+    )
+  ) {
+    console.log(barry.position)
+    console.log({ row: randRow, column: randColumn })
+    console.log('retry')
+    return targetLocate()
+    // ^^^
   } else {
     document
       .querySelector(`.r${randRow}c${randColumn}`)
@@ -124,6 +133,6 @@ let target = targetLocate()
 // Test: logging key presses
 const logKey = (e) => {
   barry.move(e)
-  console.log(score)
+  // console.log(score)
 }
 document.addEventListener('keydown', logKey)
