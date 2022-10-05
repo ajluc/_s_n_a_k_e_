@@ -6,6 +6,32 @@ body {
   font-family: 'Cedarville Cursive', cursive;
 }
 
+.entry-screen {
+  height: 200px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  margin: 100px 0px 0px 0px
+}
+
+p {
+  margin: 0px
+}
+
+a, a:visited, a:active {
+  text-decoration: none;
+  color: gray
+}
+
+a:hover {
+  color: inherit
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(20, 1fr);
