@@ -155,9 +155,20 @@ class Snake {
     containerContainer.append(gameOverPopUp)
     // Change grid visibility
     gridContainer.classList.add('transparent')
-    // containerContainer.addEventListener('click', () => playGame())
+    // Play again on click or spacebar
+    containerContainer.addEventListener('click', () => playGame(), {
+      once: true
+    })
+    document.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.code === 'Space') {
+          playGame()
+        }
+      },
+      { once: true }
+    )
 
-    console.log('uh oh GAME OVERRRRR')
     document.removeEventListener('keydown', logKey)
     clearInterval(interval)
   }
@@ -169,8 +180,6 @@ const barry = new Snake()
 // playGame function: will be called on click
 const playGame = () => {
   // Reset any existing board
-  // containerContainer.removeEventListener('click', () => playGame())
-
   document.querySelector('.game-over').remove()
   while (gridContainer.firstChild) {
     gridContainer.removeChild(gridContainer.firstChild)
