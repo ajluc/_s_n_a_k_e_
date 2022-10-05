@@ -1,12 +1,17 @@
 // Global variables
 const gridContainer = document.querySelector('.grid-container')
+const scoreContainer = document.querySelector('.score')
+const highScoreContainer = document.querySelector('.high-score')
 
 let numColumns = 20
-let numRows = 20
+let numRows = 15
 
 let score = 0
+let highScore = 0
 
 let speed = 100
+
+let interval
 
 // Direction variable. Value can be 0, 1, -1
 let direction = {
@@ -41,21 +46,28 @@ for (let i = 0; i < numRows; i++) {
 // 0th index is snake head, so where we move from
 // current direction
 class Snake {
-  constructor(initialPosition, directionCurrent) {
+  constructor(initialPosition, initialDirection) {
     this.position = initialPosition
-    this.direction = directionCurrent
+    this.direction = initialDirection
+  }
+  // Place snake instance
+  place() {
+    for (let i = 0; i < this.position.length; i++) {
+      let snakey = document.querySelector(
+        `.r${this.position[i].row}c${this.position[i].column}`
+      )
+      snakey.classList.add('snake-current')
+    }
   }
   // Change direction based on arrow key presses
   changeDirection(e) {
     if (direction.row) {
-      console.log(`row ${direction.row}`)
       if (e.key === 'ArrowLeft') {
         direction = { row: 0, column: -1 }
       } else if (e.key === 'ArrowRight') {
         direction = { row: 0, column: 1 }
       }
     } else if (direction.column) {
-      console.log(`column ${direction.column}`)
       if (e.key === 'ArrowDown') {
         direction = { row: 1, column: 0 }
       } else if (e.key === 'ArrowUp') {
@@ -69,7 +81,7 @@ class Snake {
   // snake head location
   // adds another index to snake location, in direction that is passed through
   move() {
-    let head = barry.position[0]
+    let head = this.position[0]
     // Update snake position based on direction (currently no time component)
     let newPosition = {
       row: head.row + direction.row,
@@ -78,40 +90,40 @@ class Snake {
     // If barry head hits himself,
     // Run gameOver function
     if (
-      barry.position.some(
+      this.position.some(
         (element) =>
           element.row === newPosition.row &&
           element.column === newPosition.column
       )
     ) {
-      console.log(barry.position)
+      console.log(this.position)
       console.log(head)
       this.gameOver()
     }
-    barry.position.unshift(newPosition) // Add new position
+    this.position.unshift(newPosition) // Add new position
     if (
       // if head intersects target, do not remove end of snake
-      barry.position[0].row === target.row &&
-      barry.position[0].column === target.column
+      this.position[0].row === target.row &&
+      this.position[0].column === target.column
     ) {
       this.intersectTarget()
     } else {
       // otherwise, remove end of snake
-      let shorten = barry.position.pop()
+      let shorten = this.position.pop()
       document
         .querySelector(`.r${shorten.row}c${shorten.column}`)
         .classList.remove('snake-current')
     }
     if (
       // If barry is inside the edge of gameboard
-      barry.position[0].row >= 0 &&
-      barry.position[0].row < numRows &&
-      barry.position[0].column >= 0 &&
-      barry.position[0].column < numColumns
+      this.position[0].row >= 0 &&
+      this.position[0].row < numRows &&
+      this.position[0].column >= 0 &&
+      this.position[0].column < numColumns
     ) {
       // Flip CSS style of new head position
       document
-        .querySelector(`.r${barry.position[0].row}c${barry.position[0].column}`)
+        .querySelector(`.r${this.position[0].row}c${this.position[0].column}`)
         .classList.add('snake-current')
     } else {
       // If barry is outside the gameboard, run gameOver function
@@ -120,17 +132,53 @@ class Snake {
   }
   intersectTarget() {
     score += 10
+    scoreContainer.innerText = score
     document.querySelector('.target-current').classList.remove('target-current')
     target = targetLocate()
+    if (score > highScore) {
+      highScore = score
+      highScoreContainer.innerText = highScore
+    }
   }
   gameOver() {
     console.log('uh oh GAME OVERRRRR')
     document.removeEventListener('keydown', logKey)
     clearInterval(interval)
   }
+  playAgain() {
+    clearInterval(interval)
+    score = 0
+    scoreContainer.innerText = score
+    let headlessSnake = this.position
+    headlessSnake.shift()
+    headlessSnake.forEach((element) => {
+      console.log(element)
+      document
+        .querySelector(`.r${element.row}c${element.column}`)
+        .classList.remove('snake-current')
+    })
+    document
+      .querySelector(`.r${target.row}c${target.column}`)
+      .classList.remove('target-current')
+    this.position = [
+      { row: 1, column: 3 },
+      { row: 1, column: 2 },
+      { row: 1, column: 1 }
+    ]
+    this.direction = {
+      column: 1,
+      row: 0
+    }
+    barry.place()
+    target = targetLocate()
+    interval = setInterval(() => barry.move(), speed) // keeps going endlessly
+  }
+}
+const play = () => {
+  interval = setInterval(() => barry.move(), speed)
 }
 
-// Instance of Snake
+// Instance (barry) of Snake
 const barry = new Snake(
   [
     { row: 1, column: 3 },
@@ -139,15 +187,11 @@ const barry = new Snake(
   ],
   direction
 )
-// Test: placing initial barry on the page
-for (let i = 0; i < barry.position.length; i++) {
-  let snakey = document.querySelector(
-    `.r${barry.position[i].row}c${barry.position[i].column}`
-  )
-  snakey.classList.add('snake-current')
-}
+// Placing initial barry on the page
+barry.place()
 
 // Random targets that are not on the snake's current locations
+// Keep it DRY/not specific - how can I get barry out? do it as a method?
 const targetLocate = () => {
   let randColumn = Math.floor(Math.random() * numColumns)
   let randRow = Math.floor(Math.random() * numRows)
@@ -170,21 +214,15 @@ const targetLocate = () => {
 let target = targetLocate()
 
 // Time delay loop
-let interval = setInterval(() => barry.move(), speed)
-// console.log(interval)
+// let interval = setInterval(() => barry.move(), speed)
+play()
 
 // Event listeners
-// if currently direction.column is 0, motion is along the row
-// Turn on event listeners to up/down arrow keys
-// Up sets direction = {column: -1, row: 0}
-// Down sets direction = {column: 1, row: 0}
-// if currently direction.row is 0, motion is along the column
-// Turn on event listeners to right/left arrow keys
-// Right sets direction = {column: 0, row: 1}
-// Left sets direction = {column: 0, row: -1}
-
-// Test: logging key presses
 const logKey = (e) => {
   barry.changeDirection(e)
 }
 document.addEventListener('keydown', logKey)
+
+document
+  .querySelector('button')
+  .addEventListener('click', () => barry.playAgain())

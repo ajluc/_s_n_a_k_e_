@@ -3,13 +3,14 @@ body {
   flex-direction: column;
   align-items: center;
   margin: 100px;
+  font-family: 'Cedarville Cursive', cursive;
 }
 
 .grid-container {
   display: grid;
   grid-template-columns: repeat(20, 1fr);
-  grid-template-rows: repeat(20, 1fr);
-  height: 500px;
+  grid-template-rows: repeat(15, 1fr);
+  height: 375px;
   width: 500px;
 }
 
