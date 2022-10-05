@@ -2,17 +2,19 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+
   margin: 100px 0px;
   font-family: 'Cedarville Cursive', cursive;
 }
 
 .entry-screen {
-  height: 200px;
-  width: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  height: 200px;
+  width: 500px;
 }
 
 h1 {
@@ -56,10 +58,23 @@ button {
   background-color: grey;
 }
 
+.container-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  justify-items: center;
+  align-items: center;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(20, 1fr);
   grid-template-rows: repeat(15, 1fr);
+
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  z-index: 1;
+
   height: 375px;
   width: 500px;
 }
@@ -67,6 +82,7 @@ button {
 .panel {
   display: flex;
   justify-content: space-between;
+
   margin: 20px 0px
 }
 
@@ -94,3 +110,14 @@ button {
   outline: 0px;
 }
 
+.game-over {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  z-index: 1;
+
+  font-size: 30px;
+}
+
+.transparent {
+  opacity: .5;
+}

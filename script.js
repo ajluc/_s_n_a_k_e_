@@ -1,5 +1,6 @@
 // Global variables
 const gridContainer = document.querySelector('.grid-container')
+const containerContainer = document.querySelector('.container-container')
 const scoreContainer = document.querySelector('.score')
 const highScoreContainer = document.querySelector('.high-score')
 
@@ -66,7 +67,7 @@ class Snake {
       snakey.classList.add('snake-current')
     }
   }
-  // Change direction based on arrow key presses
+  // Change direction based on arrow key presses (could be global function instead of method)
   changeDirection(e) {
     if (direction.row) {
       if (e.key === 'ArrowLeft') {
@@ -135,6 +136,7 @@ class Snake {
     }
   }
   intersectTarget() {
+    // could be global function instead of method
     score += 10
     scoreContainer.innerText = score
     document.querySelector('.target-current').classList.remove('target-current')
@@ -145,6 +147,16 @@ class Snake {
     }
   }
   gameOver() {
+    // could be global function instead of method
+    // // Create a div for game over message
+    const gameOverPopUp = document.createElement('div')
+    gameOverPopUp.classList.add('game-over')
+    gameOverPopUp.innerHTML = 'game<br>over'
+    containerContainer.append(gameOverPopUp)
+    // Change grid visibility
+    gridContainer.classList.add('transparent')
+    // containerContainer.addEventListener('click', () => playGame())
+
     console.log('uh oh GAME OVERRRRR')
     document.removeEventListener('keydown', logKey)
     clearInterval(interval)
@@ -156,10 +168,15 @@ const barry = new Snake()
 
 // playGame function: will be called on click
 const playGame = () => {
-  // Clear any existing board
+  // Reset any existing board
+  // containerContainer.removeEventListener('click', () => playGame())
+
+  document.querySelector('.game-over').remove()
   while (gridContainer.firstChild) {
     gridContainer.removeChild(gridContainer.firstChild)
   }
+  gridContainer.classList.remove('transparent')
+
   // Reset (or set) position and direction
   barry.position = [
     { row: 1, column: 3 },
