@@ -12,6 +12,11 @@ let highScore = 0
 let speed = 100
 
 let interval
+let target
+
+const logKey = (e) => {
+  barry.changeDirection(e)
+}
 
 // Direction variable. Value can be 0, 1, -1
 let direction = {
@@ -20,23 +25,25 @@ let direction = {
 }
 
 // Create a grid of squares with class for column and row, add checkerboard pattern
-let checker
-for (let i = 0; i < numRows; i++) {
-  if (i % 2) {
-    checker = 0
-  } else {
-    checker = 1
-  }
-  for (let j = 0; j < numColumns; j++) {
-    const square = document.createElement('div')
-    square.classList.add('square')
-    square.classList.add(`r${i}c${j}`) // Class name that contains row and column location information
-    // square.innerText = `r${i}c${j}` // Display class as inner text for check
-    if (checker % 2) {
-      square.classList.add('checker')
+const createBoard = () => {
+  let checker
+  for (let i = 0; i < numRows; i++) {
+    if (i % 2) {
+      checker = 0
+    } else {
+      checker = 1
     }
-    gridContainer.append(square)
-    checker++
+    for (let j = 0; j < numColumns; j++) {
+      const square = document.createElement('div')
+      square.classList.add('square')
+      square.classList.add(`r${i}c${j}`) // Class name that contains row and column location information
+      // square.innerText = `r${i}c${j}` // Display class as inner text for check
+      if (checker % 2) {
+        square.classList.add('checker')
+      }
+      gridContainer.append(square)
+      checker++
+    }
   }
 }
 
@@ -46,9 +53,9 @@ for (let i = 0; i < numRows; i++) {
 // 0th index is snake head, so where we move from
 // current direction
 class Snake {
-  constructor(initialPosition, initialDirection) {
+  constructor(initialPosition) {
     this.position = initialPosition
-    this.direction = initialDirection
+    // this.direction = initialDirection
   }
   // Place snake instance
   place() {
@@ -87,8 +94,7 @@ class Snake {
       row: head.row + direction.row,
       column: head.column + direction.column
     }
-    // If barry head hits himself,
-    // Run gameOver function
+    // If barry head hits himself, run gameOver function
     if (
       this.position.some(
         (element) =>
@@ -145,50 +151,40 @@ class Snake {
     document.removeEventListener('keydown', logKey)
     clearInterval(interval)
   }
-  playAgain() {
-    clearInterval(interval)
-    score = 0
-    scoreContainer.innerText = score
-    let headlessSnake = this.position
-    headlessSnake.shift()
-    headlessSnake.forEach((element) => {
-      console.log(element)
-      document
-        .querySelector(`.r${element.row}c${element.column}`)
-        .classList.remove('snake-current')
-    })
-    document
-      .querySelector(`.r${target.row}c${target.column}`)
-      .classList.remove('target-current')
-    this.position = [
-      { row: 1, column: 3 },
-      { row: 1, column: 2 },
-      { row: 1, column: 1 }
-    ]
-    this.direction = {
-      column: 1,
-      row: 0
-    }
-    barry.place()
-    target = targetLocate()
-    interval = setInterval(() => barry.move(), speed) // keeps going endlessly
-  }
-}
-const play = () => {
-  interval = setInterval(() => barry.move(), speed)
 }
 
 // Instance (barry) of Snake
-const barry = new Snake(
-  [
+const barry = new Snake()
+
+// playGame function: will be called on click
+const playGame = () => {
+  // Clear any existing board
+  while (gridContainer.firstChild) {
+    gridContainer.removeChild(gridContainer.firstChild)
+  }
+  // Reset (or set) position and direction
+  barry.position = [
     { row: 1, column: 3 },
     { row: 1, column: 2 },
     { row: 1, column: 1 }
-  ],
-  direction
-)
-// Placing initial barry on the page
-barry.place()
+  ]
+  direction = {
+    column: 1,
+    row: 0
+  }
+  // Reset this game's score
+  score = 0
+  scoreContainer.innerText = score
+  // Set game board
+  createBoard()
+  barry.place()
+  target = targetLocate()
+  // Add key listener
+  document.addEventListener('keydown', logKey)
+  // Clear any old, start new movement
+  clearInterval(interval)
+  interval = setInterval(() => barry.move(), speed)
+}
 
 // Random targets that are not on the snake's current locations
 // Keep it DRY/not specific - how can I get barry out? do it as a method?
@@ -211,18 +207,8 @@ const targetLocate = () => {
     return { row: randRow, column: randColumn }
   }
 }
-let target = targetLocate()
 
-// Time delay loop
-// let interval = setInterval(() => barry.move(), speed)
-play()
+playGame()
 
 // Event listeners
-const logKey = (e) => {
-  barry.changeDirection(e)
-}
-document.addEventListener('keydown', logKey)
-
-document
-  .querySelector('button')
-  .addEventListener('click', () => barry.playAgain())
+document.querySelector('button').addEventListener('click', () => playGame())
