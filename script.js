@@ -9,7 +9,7 @@ let numRows = 15
 let score = 0
 let highScore = 0
 
-let speed = 100
+let speed = 90
 
 let interval
 let target
@@ -102,8 +102,6 @@ class Snake {
           element.column === newPosition.column
       )
     ) {
-      console.log(this.position)
-      console.log(head)
       this.gameOver()
     }
     this.position.unshift(newPosition) // Add new position
@@ -196,9 +194,6 @@ const targetLocate = () => {
       (element) => element.row === randRow && element.column === randColumn
     )
   ) {
-    console.log(barry.position)
-    console.log({ row: randRow, column: randColumn })
-    console.log('retry')
     return targetLocate()
   } else {
     document
@@ -211,4 +206,25 @@ const targetLocate = () => {
 playGame()
 
 // Event listeners
-document.querySelector('button').addEventListener('click', () => playGame())
+document
+  .querySelector('.play-again')
+  .addEventListener('click', () => playGame())
+
+document.querySelector('.speed1').addEventListener('click', () => {
+  document.querySelector('.current').classList.remove('current')
+  document.querySelector('.speed1').classList.add('current')
+  speed = 115
+  playGame()
+})
+document.querySelector('.speed2').addEventListener('click', () => {
+  document.querySelector('.current').classList.remove('current')
+  document.querySelector('.speed2').classList.add('current')
+  speed = 90
+  playGame()
+})
+document.querySelector('.speed3').addEventListener('click', () => {
+  document.querySelector('.current').classList.remove('current')
+  document.querySelector('.speed3').classList.add('current')
+  speed = 65
+  playGame()
+})
