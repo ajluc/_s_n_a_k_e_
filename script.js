@@ -14,7 +14,7 @@ let speed = 90
 
 let interval
 let target
-let darkSnake = false
+let darkSnake = true
 
 const logKey = (e) => {
   barry.changeDirection(e)
@@ -266,7 +266,7 @@ document
   .querySelector('.play-again')
   .addEventListener('click', () => countDown())
 
-// can still toggle grey color without restarting
+// issue: can still toggle grey color without restarting
 document.querySelector('.speed1').addEventListener('click', () => {
   document.querySelector('.current').classList.remove('current')
   document.querySelector('.speed1').classList.add('current')
@@ -287,11 +287,17 @@ document.querySelector('.speed3').addEventListener('click', () => {
 })
 
 // // Dark mode button
-document.querySelector('link[rel=stylesheet].dark').disabled = true
+document.querySelector('link[rel=stylesheet].dark').disabled = darkSnake
 
 document.querySelector('.color-mode').addEventListener('click', () => {
+  darkSnake = !darkSnake
   document.querySelector('.color-mode').classList.toggle('dark-button')
-  document.querySelector('link[rel=stylesheet].dark').disabled = false
+  if (darkSnake) {
+    document.querySelector('.color-mode').innerText = 'dark'
+  } else {
+    document.querySelector('.color-mode').innerText = 'light'
+  }
+  document.querySelector('link[rel=stylesheet].dark').disabled = darkSnake
 })
 
 // Stop keystroke moving the page
