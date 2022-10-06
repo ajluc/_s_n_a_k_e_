@@ -14,6 +14,7 @@ let speed = 90
 
 let interval
 let target
+let darkSnake = false
 
 const logKey = (e) => {
   barry.changeDirection(e)
@@ -156,7 +157,7 @@ class Snake {
     // Change grid visibility
     gridContainer.classList.add('transparent')
     // Play again on click or spacebar
-    containerContainer.addEventListener('click', () => playGame(), {
+    containerContainer.addEventListener('click', () => countDown(), {
       once: true
     })
     document.addEventListener(
@@ -283,6 +284,14 @@ document.querySelector('.speed3').addEventListener('click', () => {
   document.querySelector('.speed3').classList.add('current')
   speed = 65
   countDown()
+})
+
+// // Dark mode button
+document.querySelector('link[rel=stylesheet].dark').disabled = true
+
+document.querySelector('.color-mode').addEventListener('click', () => {
+  document.querySelector('.color-mode').classList.toggle('dark-button')
+  document.querySelector('link[rel=stylesheet].dark').disabled = false
 })
 
 // Stop keystroke moving the page
