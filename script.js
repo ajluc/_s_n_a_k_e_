@@ -285,7 +285,7 @@ document.querySelector('.speed3').addEventListener('click', () => {
   speed = 65
   countDown()
 })
-
+// stash
 // // Dark mode button
 document.querySelector('link[rel=stylesheet].dark').disabled = darkSnake
 
