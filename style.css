@@ -110,12 +110,16 @@ button {
   outline: 0px;
 }
 
-.game-over {
+.game-over, .countdown {
   grid-column: 1 / 2;
   grid-row: 1 / 2;
   z-index: 1;
 
   font-size: 30px;
+}
+
+.countdown {
+  font-size: 60px;
 }
 
 .transparent {

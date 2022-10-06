@@ -163,7 +163,7 @@ class Snake {
       'keydown',
       (e) => {
         if (e.code === 'Space') {
-          playGame()
+          countDown()
         }
       },
       { once: true }
@@ -177,13 +177,41 @@ class Snake {
 // Instance (barry) of Snake
 const barry = new Snake()
 
+const countDown = () => {
+  document.querySelector('.game-over').remove()
+
+  // // Create a div for countdown message
+  const countDownPopUp = document.createElement('div')
+  countDownPopUp.classList.add('countdown')
+  gridContainer.classList.add('transparent')
+  countDownPopUp.innerHTML = '3'
+  let time = 2
+  const countDownTimeout = setInterval(() => {
+    countDownPopUp.innerHTML = `${time}`
+    time--
+    if (time === 0) {
+      window.clearInterval(countDownTimeout)
+    }
+  }, 500)
+  containerContainer.append(countDownPopUp)
+  setTimeout(() => {
+    gridContainer.classList.remove('transparent')
+    document.querySelector('.countdown').remove()
+    playGame()
+  }, 1500)
+}
+
 // playGame function: will be called on click
 const playGame = () => {
   // Reset any existing board
-  document.querySelector('.game-over').remove()
+  // document.querySelector('.game-over').remove()
   while (gridContainer.firstChild) {
     gridContainer.removeChild(gridContainer.firstChild)
   }
+
+  // document.querySelector('.game-over').remove()
+  // window.clearInterval(countDownTimeout)
+
   gridContainer.classList.remove('transparent')
 
   // Reset (or set) position and direction
@@ -229,28 +257,30 @@ const targetLocate = () => {
   }
 }
 
-playGame()
+createBoard()
+countDown()
 
 // Event listeners
 document
   .querySelector('.play-again')
-  .addEventListener('click', () => playGame())
+  .addEventListener('click', () => countDown())
 
+// can still toggle grey color without restarting
 document.querySelector('.speed1').addEventListener('click', () => {
   document.querySelector('.current').classList.remove('current')
   document.querySelector('.speed1').classList.add('current')
   speed = 115
-  playGame()
+  countDown()
 })
 document.querySelector('.speed2').addEventListener('click', () => {
   document.querySelector('.current').classList.remove('current')
   document.querySelector('.speed2').classList.add('current')
   speed = 90
-  playGame()
+  countDown()
 })
 document.querySelector('.speed3').addEventListener('click', () => {
   document.querySelector('.current').classList.remove('current')
   document.querySelector('.speed3').classList.add('current')
   speed = 65
-  playGame()
+  countDown()
 })
