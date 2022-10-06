@@ -284,3 +284,18 @@ document.querySelector('.speed3').addEventListener('click', () => {
   speed = 65
   countDown()
 })
+
+// Stop keystroke moving the page
+window.addEventListener(
+  'keydown',
+  function (e) {
+    if (
+      ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(
+        e.code
+      ) > -1
+    ) {
+      e.preventDefault()
+    }
+  },
+  false
+)
