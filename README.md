@@ -10,41 +10,56 @@
 
 ### **_Description_**
 
-This project is a recreation of the classic browser game Snake, using vanilla Javascript. The introduction of time and motion provides an interesting challenge when building a game like Snake.
+This project is a recreation of the classic browser game Snake, using vanilla Javascript. The introduction of time and motion to JS provides an interesting challenge when building a game like Snake.
 
 ---
 
 ### **_Technologies Used_**
 
 1. Vanilla Javascript
-- DOM Manipulation
-- Classes and Instances/Inheritance
-2. HTML
-3. CSS
-
-
+2. DOM Manipulation
+3. Classes and Instances/Inheritance
+4. HTML
+5. CSS
 
 ---
 
 ### **_Getting Started_**
 
-Hit the arrow keys and start playing! [HOLD for future content]
+Hit the arrow keys and start playing! A countdown fires before gameplay. On game over, clicking the board or hitting spacebar allows the user to play again. The current round's score is stored at the bottom left, and high score is stored at the bottom right. In the center are buttons to control the speed/difficulty of the game and a toggle for light or dark mode.
 
 ---
 
 ### **_Screenshots_**
 
-[HOLD for future content]
+Light mode of gameplay:
+![Light Mode](./images/light_play.png)
+
+Game over screen:
+![Game Over](./images/light_GO.png)
+
+Dark mode of gameplay:
+![Dark Mode](./images/dark_play.png)
 
 ---
 
 ### **_Tasks_**
 
-- [ ] 
-- [ ] 
+- [x] Difficulty levels that change the snake's speed
+- [x] Countdown timer before gameplay
+- [x] Make targets a circle pushed on top of grid, rather than altering grid style
+- [ ] Add secondary target with larger score weight. Can it generate only in the outer few rows/columns?
 
 ---
 
 ### **_Credits_**
+
+Disable Scrolling: [stackoverflow.com](https://stackoverflow.com/questions/8916620/disable-arrow-key-scrolling-in-users-browser)
+
+setInterval: [w3schools.com](https://www.w3schools.com/jsref/met_win_setinterval.asp)
+
+Git Branching: [git-scm.com](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
+
+Replacing CSS File: [stackoverflow.com](https://stackoverflow.com/questions/19844545/replacing-css-file-on-the-fly-and-apply-the-new-style-to-the-page)
 
 Markdown Guide: [ia.net](https://ia.net/writer/support/general/markdown-guide)
