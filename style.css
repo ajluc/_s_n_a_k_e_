@@ -30,11 +30,11 @@ p {
 
 a, a:visited, a:active {
   text-decoration: none;
-  color: gray
+  color: inherit
 }
 
 a:hover {
-  color: inherit
+  color: gray
 }
 
 button {

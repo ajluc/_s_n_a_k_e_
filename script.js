@@ -1,4 +1,8 @@
+// Disable dark mode css file on load
+document.querySelector('link[rel=stylesheet].dark').disabled = true
+
 // Global variables
+
 const gridContainer = document.querySelector('.grid-container')
 const containerContainer = document.querySelector('.container-container')
 const scoreContainer = document.querySelector('.score')
@@ -12,23 +16,21 @@ let highScore = 0
 
 let speed = 90
 
+let direction
 let interval
 let target
 let darkSnake = true
 
 let mySound = new Audio('./sounds/mixkit-game-ball-tap-2073.wav')
 
+// Functions
+
+// Key logs for arrow key movement
 const logKey = (e) => {
   barry.changeDirection(e)
 }
 
-// Direction variable. Value can be 0, 1, -1
-let direction = {
-  column: 1, // moving Down the column
-  row: 0 // not moving R or L
-}
-
-// Create a grid of squares with class for column and row, add checkerboard pattern
+// Generate a grid of squares with class for column and row, add checkerboard pattern
 const createBoard = () => {
   let checker
   for (let i = 0; i < numRows; i++) {
@@ -41,7 +43,7 @@ const createBoard = () => {
       const square = document.createElement('div')
       square.classList.add('square')
       square.classList.add(`r${i}c${j}`) // Class name that contains row and column location information
-      // square.innerText = `r${i}c${j}` // Display class as inner text for check
+      // square.innerText = `r${i}c${j}` // Display class as inner text, keep for check
       if (checker % 2) {
         square.classList.add('checker')
       }
@@ -51,15 +53,83 @@ const createBoard = () => {
   }
 }
 
-// Create Snake class
-// snake object needs:
-// array of current locations
-// 0th index is snake head, so where we move from
-// current direction
+const countDown = () => {
+  document.querySelector('.game-over').remove()
+  // Create a div for countdown message
+  const countDownPopUp = document.createElement('div')
+  countDownPopUp.classList.add('countdown')
+  gridContainer.classList.add('transparent')
+  countDownPopUp.innerHTML = '3'
+  let time = 2
+  const countDownTimeout = setInterval(() => {
+    countDownPopUp.innerHTML = `${time}`
+    time--
+    if (time === 0) {
+      window.clearInterval(countDownTimeout)
+    }
+  }, 500)
+  containerContainer.append(countDownPopUp)
+  setTimeout(() => {
+    gridContainer.classList.remove('transparent')
+    document.querySelector('.countdown').remove()
+    playGame()
+  }, 1500)
+}
+
+// Random target generation not on the snake's current locations
+const targetLocate = () => {
+  let randColumn = Math.floor(Math.random() * numColumns)
+  let randRow = Math.floor(Math.random() * numRows)
+  if (
+    barry.position.some(
+      (element) => element.row === randRow && element.column === randColumn
+    )
+  ) {
+    return targetLocate()
+  } else {
+    let circle = document.createElement('div')
+    circle.classList.add('target-current')
+    document.querySelector(`.r${randRow}c${randColumn}`).append(circle)
+    return { row: randRow, column: randColumn }
+  }
+}
+
+// playGame function: will be called on click
+const playGame = () => {
+  // Reset any existing board
+  while (gridContainer.firstChild) {
+    gridContainer.removeChild(gridContainer.firstChild)
+  }
+  gridContainer.classList.remove('transparent')
+  // Reset (or set) position and direction
+  barry.position = [
+    { row: 1, column: 3 },
+    { row: 1, column: 2 },
+    { row: 1, column: 1 }
+  ]
+  direction = {
+    column: 1,
+    row: 0
+  }
+  // Reset this game's score
+  score = 0
+  scoreContainer.innerText = score
+  // Set game board
+  createBoard()
+  barry.place()
+  target = targetLocate()
+  // Add key listener
+  document.addEventListener('keydown', logKey)
+  // Clear any old, start new movement
+  clearInterval(interval)
+  interval = setInterval(() => barry.move(), speed)
+}
+
+// Snake class
+
 class Snake {
   constructor(initialPosition) {
     this.position = initialPosition
-    // this.direction = initialDirection
   }
   // Place snake instance
   place() {
@@ -85,15 +155,11 @@ class Snake {
         direction = { row: -1, column: 0 }
       }
     }
-    // this.move() // allows movement on arrow key presses
   }
-  // snake move() method needs:
-  // argument of direction
-  // snake head location
-  // adds another index to snake location, in direction that is passed through
+  // snake move() method based on current direction
   move() {
     let head = this.position[0]
-    // Update snake position based on direction (currently no time component)
+    // Update snake position based on direction
     let newPosition = {
       row: head.row + direction.row,
       column: head.column + direction.column
@@ -152,7 +218,7 @@ class Snake {
   }
   gameOver() {
     // could be global function instead of method
-    // // Create a div for game over message
+    // Create a div for game over message
     const gameOverPopUp = document.createElement('div')
     gameOverPopUp.classList.add('game-over')
     gameOverPopUp.innerHTML = 'game<br>over'
@@ -172,89 +238,12 @@ class Snake {
 // Instance (barry) of Snake
 const barry = new Snake()
 
-const countDown = () => {
-  document.querySelector('.game-over').remove()
-
-  // // Create a div for countdown message
-  const countDownPopUp = document.createElement('div')
-  countDownPopUp.classList.add('countdown')
-  gridContainer.classList.add('transparent')
-  countDownPopUp.innerHTML = '3'
-  let time = 2
-  const countDownTimeout = setInterval(() => {
-    countDownPopUp.innerHTML = `${time}`
-    time--
-    if (time === 0) {
-      window.clearInterval(countDownTimeout)
-    }
-  }, 500)
-  containerContainer.append(countDownPopUp)
-  setTimeout(() => {
-    gridContainer.classList.remove('transparent')
-    document.querySelector('.countdown').remove()
-    playGame()
-  }, 1500)
-}
-
-// playGame function: will be called on click
-const playGame = () => {
-  // Reset any existing board
-  while (gridContainer.firstChild) {
-    gridContainer.removeChild(gridContainer.firstChild)
-  }
-
-  gridContainer.classList.remove('transparent')
-
-  // Reset (or set) position and direction
-  barry.position = [
-    { row: 1, column: 3 },
-    { row: 1, column: 2 },
-    { row: 1, column: 1 }
-  ]
-  direction = {
-    column: 1,
-    row: 0
-  }
-  // Reset this game's score
-  score = 0
-  scoreContainer.innerText = score
-  // Set game board
-  createBoard()
-  barry.place()
-  target = targetLocate()
-  // Add key listener
-  document.addEventListener('keydown', logKey)
-  // Clear any old, start new movement
-  clearInterval(interval)
-  interval = setInterval(() => barry.move(), speed)
-}
-
-// Random targets that are not on the snake's current locations
-// Keep it DRY/not specific - how can I get barry out? do it as a method?
-const targetLocate = () => {
-  let randColumn = Math.floor(Math.random() * numColumns)
-  let randRow = Math.floor(Math.random() * numRows)
-  if (
-    barry.position.some(
-      (element) => element.row === randRow && element.column === randColumn
-    )
-  ) {
-    return targetLocate()
-  } else {
-    let circle = document.createElement('div')
-    circle.classList.add('target-current')
-    document.querySelector(`.r${randRow}c${randColumn}`).append(circle)
-    // document
-    //   .querySelector(`.r${randRow}c${randColumn}`)
-    //   .classList.add('target-current')
-    return { row: randRow, column: randColumn }
-  }
-}
-
 createBoard()
 countDown()
 
 // Event listeners
+
+// Play again
 document
   .querySelector('.play-again')
   .addEventListener('click', () => countDown())
@@ -265,6 +254,7 @@ document.addEventListener('keydown', (e) => {
   }
 })
 
+// Speed change buttons
 // issue: can still toggle grey color without restarting
 document.querySelector('.speed1').addEventListener('click', () => {
   document.querySelector('.current').classList.remove('current')
@@ -285,8 +275,6 @@ document.querySelector('.speed3').addEventListener('click', () => {
   countDown()
 })
 
-// Disable dark mode css file on load
-document.querySelector('link[rel=stylesheet].dark').disabled = darkSnake
 // Dark mode button
 document.querySelector('.color-mode').addEventListener('click', () => {
   darkSnake = !darkSnake
