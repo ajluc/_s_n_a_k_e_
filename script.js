@@ -163,15 +163,6 @@ class Snake {
     containerContainer.addEventListener('click', () => countDown(), {
       once: true
     })
-    document.addEventListener(
-      'keydown',
-      (e) => {
-        if (e.code === 'Space') {
-          countDown()
-        }
-      },
-      { once: true }
-    )
 
     document.removeEventListener('keydown', logKey)
     clearInterval(interval)
@@ -268,11 +259,17 @@ document
   .querySelector('.play-again')
   .addEventListener('click', () => countDown())
 
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    countDown()
+  }
+})
+
 // issue: can still toggle grey color without restarting
 document.querySelector('.speed1').addEventListener('click', () => {
   document.querySelector('.current').classList.remove('current')
   document.querySelector('.speed1').classList.add('current')
-  speed = 115
+  speed = 120
   countDown()
 })
 document.querySelector('.speed2').addEventListener('click', () => {
@@ -284,7 +281,7 @@ document.querySelector('.speed2').addEventListener('click', () => {
 document.querySelector('.speed3').addEventListener('click', () => {
   document.querySelector('.current').classList.remove('current')
   document.querySelector('.speed3').classList.add('current')
-  speed = 65
+  speed = 60
   countDown()
 })
 
