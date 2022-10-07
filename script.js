@@ -1,7 +1,9 @@
 // Disable dark mode css file on load
 document.querySelector('link[rel=stylesheet].dark').disabled = true
 
+//
 // Global variables
+//
 
 const gridContainer = document.querySelector('.grid-container')
 const containerContainer = document.querySelector('.container-container')
@@ -23,7 +25,9 @@ let darkSnake = true
 
 let mySound = new Audio('./sounds/mixkit-game-ball-tap-2073.wav')
 
+//
 // Functions
+//
 
 // Key logs for arrow key movement
 const logKey = (e) => {
@@ -125,7 +129,9 @@ const playGame = () => {
   interval = setInterval(() => barry.move(), speed)
 }
 
+//
 // Snake class
+//
 
 class Snake {
   constructor(initialPosition) {
@@ -241,7 +247,9 @@ const barry = new Snake()
 createBoard()
 countDown()
 
+//
 // Event listeners
+//
 
 // Play again
 document
