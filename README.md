@@ -49,6 +49,7 @@ Dark mode of gameplay:
 - [x] Countdown timer before gameplay
 - [x] Make targets a circle pushed on top of grid, rather than altering grid style
 - [ ] Add secondary target with larger score weight. Can it generate only in the outer few rows/columns?
+- [ ] Add sounds for game over and countdown
 
 ---
 

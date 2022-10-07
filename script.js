@@ -288,9 +288,9 @@ document.querySelector('.speed3').addEventListener('click', () => {
   countDown()
 })
 
-// // Dark mode button
+// Disable dark mode css file on load
 document.querySelector('link[rel=stylesheet].dark').disabled = darkSnake
-
+// Dark mode button
 document.querySelector('.color-mode').addEventListener('click', () => {
   darkSnake = !darkSnake
   document.querySelector('.color-mode').classList.toggle('dark-button')
