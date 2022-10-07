@@ -16,6 +16,8 @@ let interval
 let target
 let darkSnake = true
 
+let mySound = new Audio('./sounds/mixkit-game-ball-tap-2073.wav')
+
 const logKey = (e) => {
   barry.changeDirection(e)
 }
@@ -146,6 +148,7 @@ class Snake {
       highScore = score
       highScoreContainer.innerText = highScore
     }
+    mySound.play()
   }
   gameOver() {
     // could be global function instead of method

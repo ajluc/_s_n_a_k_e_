@@ -62,4 +62,6 @@ Git Branching: [git-scm.com](https://git-scm.com/book/en/v2/Git-Branching-Basic-
 
 Replacing CSS File: [stackoverflow.com](https://stackoverflow.com/questions/19844545/replacing-css-file-on-the-fly-and-apply-the-new-style-to-the-page)
 
+Adding Sound: [Noah Eakin on Medium](https://noaheakin.medium.com/adding-sound-to-your-js-web-app-f6a0ca728984#:~:text=The%20simplest%20way%20to%20add,starts%20playing%20the%20current%20audio.)
+
 Markdown Guide: [ia.net](https://ia.net/writer/support/general/markdown-guide)
