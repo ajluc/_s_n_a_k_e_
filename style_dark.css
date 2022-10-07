@@ -95,6 +95,9 @@ button {
 
 .square {
   border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .checker, button {
@@ -104,7 +107,8 @@ button {
 .target-current {
   background-color: cornflowerblue;
   border-radius: 50%;
-  border: solid black 3px;
+  height: 80%;
+  width: 80%;
 }
 
 .snake-current {

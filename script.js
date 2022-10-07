@@ -205,13 +205,9 @@ const countDown = () => {
 // playGame function: will be called on click
 const playGame = () => {
   // Reset any existing board
-  // document.querySelector('.game-over').remove()
   while (gridContainer.firstChild) {
     gridContainer.removeChild(gridContainer.firstChild)
   }
-
-  // document.querySelector('.game-over').remove()
-  // window.clearInterval(countDownTimeout)
 
   gridContainer.classList.remove('transparent')
 
@@ -251,9 +247,12 @@ const targetLocate = () => {
   ) {
     return targetLocate()
   } else {
-    document
-      .querySelector(`.r${randRow}c${randColumn}`)
-      .classList.add('target-current')
+    let circle = document.createElement('div')
+    circle.classList.add('target-current')
+    document.querySelector(`.r${randRow}c${randColumn}`).append(circle)
+    // document
+    //   .querySelector(`.r${randRow}c${randColumn}`)
+    //   .classList.add('target-current')
     return { row: randRow, column: randColumn }
   }
 }
@@ -285,7 +284,7 @@ document.querySelector('.speed3').addEventListener('click', () => {
   speed = 65
   countDown()
 })
-// stash
+
 // // Dark mode button
 document.querySelector('link[rel=stylesheet].dark').disabled = darkSnake
 
