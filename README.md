@@ -4,7 +4,7 @@
 
 ### Author: Amaya Lucas
 
-#### [GitHub](https://github.com/ajluc) | [LinkedIn](https://www.linkedin.com/in/amaya-lucas/) | [Instagram](https://instagram.com/ayama.jo)
+#### [_s_n_a_k_e_](https://_s_n_a_k_e_.surge.sh/) || [GitHub](https://github.com/ajluc) | [LinkedIn](https://www.linkedin.com/in/amaya-lucas/) | [Instagram](https://instagram.com/ayama.jo)
 
 ---
 
